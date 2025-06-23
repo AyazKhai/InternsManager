@@ -12,6 +12,8 @@ namespace InternsManagement.Domain.Entities
 
         public string? Description { get; set; }
 
-        public ICollection<Intern> Interns { get; set; } = new List<Intern>();
+        public ICollection<Intern>? Interns { get; set; } = new List<Intern>();
+        public Guid DirectionId { get; set; }
+        public InternshipDirection Direction { get; set; } = null!;
     }
 }

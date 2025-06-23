@@ -38,17 +38,17 @@ namespace InternsManagement.Infrastucture.Repositories
 
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects.Include(d => d.Interns).Include(x => x.Direction).ToListAsync();
         }
 
         public async Task<Project?> GetByIdAsync(Guid id)
         {
-            return await _context.Projects.FindAsync(id); 
+            return await _context.Projects.Include(d => d.Interns).Include(x => x.Direction).FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<Project?> GetByNameAsync(string name)
         {
-            return await _context.Projects.FirstOrDefaultAsync(x => x.Name == name);
+            return await _context.Projects.Include(d => d.Interns).Include(x => x.Direction).FirstOrDefaultAsync(x => x.Name == name);
         }
 
         public async Task UpdateAsync(Project entity)

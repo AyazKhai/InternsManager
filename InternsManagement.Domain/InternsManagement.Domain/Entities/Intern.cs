@@ -18,10 +18,10 @@ namespace InternsManagement.Domain.Entities
         public string? PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        public Guid DirectionId { get; set; }
-        public InternshipDirection Direction { get; set; } = null!;
+        public Guid? DirectionId { get; set; }
+        public InternshipDirection? Direction { get; set; } = null!;
 
-        public Guid ProjectId { get; set; }
-        public Project Project { get; set; } = null!;
+        public Guid? ProjectId { get; set; }
+        public Project? Project { get; set; } = null!;
     }
 }

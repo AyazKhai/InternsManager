@@ -26,7 +26,6 @@ namespace InternsManagement.Application.Dtos
         [Required][EmailAddress] string Email,
         [Phone][RegularExpression(@"^\+7\d{10}$")] string? PhoneNumber,
         [Required][DataType(DataType.Date)] DateTime DateOfBirth,
-        [Required] Guid DirectionId,
         [Required] Guid ProjectId
     );
     public record InternDto
@@ -42,7 +41,16 @@ namespace InternsManagement.Application.Dtos
         //string DirectionName,
         //Guid ProjectId,
         //string ProjectTitle
-        ProjectDto ProjectDto,
-        DirectionDto DirectionDto
+        ProjectShortDto? ProjectShortDto
+    );
+    public record InternShortDto
+    (
+        Guid Id,
+        string FirstName,
+        string LastName,
+        Gender Gender,
+        string Email,
+        string? PhoneNumber,
+        DateTime DateOfBirth
     );
 }

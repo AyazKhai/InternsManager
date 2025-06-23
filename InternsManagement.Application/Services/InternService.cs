@@ -3,6 +3,7 @@ using InternsManagement.Application.Dtos;
 using InternsManagement.Application.Extensions;
 using InternsManagement.Application.ServiceInterfaces;
 using InternsManagement.Domain.Entities;
+using InternsManagement.Domain.Enums;
 using InternsManagement.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,6 @@ namespace InternsManagement.Application.Services
     public class InternService : IInternService
     {
         private readonly IInternRepository _internRepository;
-        //private readonly IDirectionRepository _directionRepository;
-        //private readonly IProjectRepository _projectRepository;
 
 
         public InternService(IInternRepository internRepository)
@@ -26,14 +25,16 @@ namespace InternsManagement.Application.Services
 
         public async Task<InternDto> CreateAsync(CreateInternDto createintern)
         {
+            if (!Enum.IsDefined(typeof(Gender), createintern.Gender) || createintern.Gender == Gender.Unknown)
+                throw new InvalidOperationException("Пол указан неверно");
 
             if (await _internRepository.GetByEmailAsync(createintern.Email!) != null)
-                throw new InvalidOperationException("Email уже используется");
+                throw new ConflictException("Email уже используется");
 
             if (!string.IsNullOrEmpty(createintern.PhoneNumber))
             {
                 if (await _internRepository.GetByPhoneNumberAsync(createintern.PhoneNumber) != null)
-                    throw new InvalidOperationException("Телефон уже используется");
+                    throw new ConflictException("Телефон уже используется");
             }
 
 
@@ -45,8 +46,6 @@ namespace InternsManagement.Application.Services
                 Email = createintern.Email!,
                 PhoneNumber = createintern.PhoneNumber,
                 DateOfBirth = createintern.DateOfBirth,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
             };
 
             await _internRepository.AddAsync(intern);
@@ -56,8 +55,7 @@ namespace InternsManagement.Application.Services
         public async Task DeleteAsync(Guid id)
         {
             var intern = await _internRepository.GetByIdAsync(id);
-            if (intern is null)
-                ы
+            if (intern is null) { throw new NotFoundException("Стажер не найден"); }
 
             await _internRepository.DeleteAsync(id);
         }
@@ -72,7 +70,7 @@ namespace InternsManagement.Application.Services
         {
             var intern = await _internRepository.GetByEmailAsync(email);
 
-            if (intern is null) { return null; }
+            if (intern is null) { throw new NotFoundException("Стажер не найден"); }
             return intern.AsDto();
         }
 
@@ -80,7 +78,7 @@ namespace InternsManagement.Application.Services
         {
            var intern = await _internRepository.GetByIdAsync(id);
 
-            if (intern is null) { return null; }
+            if (intern is null) { throw new NotFoundException("Стажер не найден"); }
             return intern.AsDto();
         }
 
@@ -88,7 +86,7 @@ namespace InternsManagement.Application.Services
         {
             var intern = await _internRepository.GetByPhoneNumberAsync(phonenumber);
 
-            if (intern is null) { return null; }
+            if (intern is null) { throw new NotFoundException("Стажер не найден"); }
             return intern.AsDto();
         }
 
@@ -118,7 +116,7 @@ namespace InternsManagement.Application.Services
             intern.Email = updateInternDto.Email;
             intern.PhoneNumber = updateInternDto.PhoneNumber;
             intern.DateOfBirth = updateInternDto.DateOfBirth;
-            intern.DirectionId = updateInternDto.DirectionId;
+            //intern.DirectionId = updateInternDto.DirectionId;
             intern.ProjectId = updateInternDto.ProjectId;
             intern.UpdatedAt = DateTime.UtcNow;
 

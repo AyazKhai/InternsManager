@@ -11,6 +11,6 @@ namespace InternsManagement.Domain.Entities
         public string Name { get; set; } = null!;
 
         public string? Description { get; set; }
-        public ICollection<Intern> Interns { get; set; } = new List<Intern>();
+        public ICollection<Project>? Projects { get; set; } = new List<Project>();
     }
 }

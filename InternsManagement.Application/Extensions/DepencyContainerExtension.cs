@@ -13,11 +13,13 @@ namespace InternsManagement.Application.Extensions
 {
     public static class DepencyContainerExtension
     {
-        public static void AddInternsManagementServices(this IServiceCollection services)
+        public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IInternService,InternService>();
             services.AddScoped<IDirectionService, DirectionService>();
             services.AddScoped<IProjectService, ProjectService>();
+
+
         }
     }
 }

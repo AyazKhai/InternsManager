@@ -30,25 +30,26 @@ namespace InternsManagement.Infrastucture.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var direction = await GetByIdAsync(id);
-            if (direction is not null) {
-            _context.Directions.Remove(direction);
+            if (direction is not null)
+            {
+                _context.Directions.Remove(direction);
                 await _context.SaveChangesAsync();
             }
         }
 
         public async Task<IEnumerable<InternshipDirection>> GetAllAsync()
         {
-            return await _context.Directions.ToListAsync();
+            return await _context.Directions.Include(d => d.Projects).ToListAsync();
         }
 
         public async Task<InternshipDirection?> GetByIdAsync(Guid id)
         {
-            return await _context.Directions.FindAsync(id);
+            return await _context.Directions.Include(d => d.Projects).FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<InternshipDirection?> GetByNameAsync(string name)
         {
-            return await _context.Directions.FirstOrDefaultAsync(e => e.Name == name);
+            return await _context.Directions.Include(d => d.Projects).FirstOrDefaultAsync(e => e.Name == name);
         }
 
         public async Task UpdateAsync(InternshipDirection entity)

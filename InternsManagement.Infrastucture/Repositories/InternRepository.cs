@@ -38,22 +38,22 @@ namespace InternsManagement.Infrastucture.Repositories
 
         public async Task<IEnumerable<Intern>> GetAllAsync()
         {
-            return await _context.Interns.ToListAsync();
+            return await _context.Interns.Include(d => d.Project).ThenInclude(p => p.Direction).ToListAsync();
         }
 
         public async Task<Intern?> GetByEmailAsync(string email)
         {
-            return await _context.Interns.FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Interns.Include(d => d.Project).ThenInclude(p => p.Direction).FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<Intern?> GetByIdAsync(Guid id)
         {
-            return await _context.Interns.FindAsync(id);
+            return await _context.Interns.Include(d => d.Project).ThenInclude(p => p.Direction).FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<Intern?> GetByPhoneNumberAsync(string phoneNumber)
         {
-            return await _context.Interns.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            return await _context.Interns.Include(d => d.Project).ThenInclude(p => p.Direction).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         }
 
         public async Task UpdateAsync(Intern entity)

@@ -10,7 +10,8 @@ namespace InternsManagement.Application.Dtos
     public record DirectionDto(
         Guid id, 
         string Name, 
-        string? Description
+        string? Description,
+        IEnumerable<ProjectShortDto> ProjectsShorts
         );
 
     public record CreateDirectionDto(

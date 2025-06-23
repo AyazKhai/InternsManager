@@ -41,17 +41,15 @@ namespace InternsManagement.Persistence.Persistence
                 entity.Property(i => i.DateOfBirth)
                     .IsRequired();
 
-                // Direction (1:N)
                 entity.HasOne(i => i.Direction)
-                    .WithMany(d => d.Interns)
+                    .WithMany()  
                     .HasForeignKey(i => i.DirectionId)
                     .OnDelete(DeleteBehavior.Restrict); // запрещаем удаление направления, если есть стажёры
 
-                // Project (1:N)
                 entity.HasOne(i => i.Project)
                     .WithMany(p => p.Interns)
                     .HasForeignKey(i => i.ProjectId)
-                    .OnDelete(DeleteBehavior.Restrict); // то же самое для проектов
+                    .OnDelete(DeleteBehavior.Restrict); // запрещаем удаление проекта, если есть стажёры
             });
         }
 
@@ -69,7 +67,12 @@ namespace InternsManagement.Persistence.Persistence
                     .IsUnique();
 
                 entity.Property(d => d.Description)
-                .HasMaxLength(500);
+                    .HasMaxLength(500);
+
+                entity.HasMany(d => d.Projects)
+                    .WithOne(p => p.Direction)
+                    .HasForeignKey(p => p.DirectionId)
+                    .OnDelete(DeleteBehavior.Restrict); 
             });
         }
 
@@ -91,4 +94,5 @@ namespace InternsManagement.Persistence.Persistence
             });
         }
     }
+
 }
